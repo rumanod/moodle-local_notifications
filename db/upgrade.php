@@ -15,17 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * Plugin upgrade steps are defined here.
  *
- * @package     local_notifications
- * @copyright   2018 GetSmarter <rumano.balie@getsmarter.com>
+ * @package     local_getsmarter
+ * @category    upgrade
+ * @copyright   2018 Getsmarter <rumano.balie@getsmarter.com>
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_notifications';
-$plugin->release = '1.0.0';
-$plugin->version = 2018120200;
-$plugin->requires = 2016120500;
-$plugin->maturity = MATURITY_STABLE;
+/**
+ * Execute mod_netverify upgrade from the given old version.
+ *
+ * @param int $oldversion
+ * @return bool
+ */
+function xmldb_local_notifications_upgrade($oldversion) {
+    global $CFG;
+
+    if ($oldversion < 2018120100) {
+
+        global $DB;
+        $dbman = $DB->get_manager();
+
+        $table = new xmldb_table('local_notifications');
+
+        if (!$dbman->table_exists($table)) {
+            $dbman->install_one_table_from_xmldb_file($CFG->dirroot.'/local/notifications/db/install.xml', 'local_notifications');
+        }
+
+        upgrade_plugin_savepoint(true, 2018120100, 'local', 'notifications');
+    }
+
+    return true;
+}
