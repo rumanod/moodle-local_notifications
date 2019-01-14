@@ -15,17 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Plugin version and other meta-data are defined here.
+ * The theme_legend custom notification observers.
  *
- * @package     local_notifications
- * @copyright   2018 GetSmarter <rumano.balie@getsmarter.com>
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    theme_legend
+ * @copyright  2017 GetSmarter {@link http://www.getsmarter.co.za}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'local_notifications';
-$plugin->release = '1.0.0';
-$plugin->version = 2018120200;
-$plugin->requires = 2016120500;
-$plugin->maturity = MATURITY_STABLE;
+$observers = array(
+    array(
+        'eventname' => '*',
+        'callback' => 'local_notifications_observer::moodle_event_observed',
+    ),
+);
